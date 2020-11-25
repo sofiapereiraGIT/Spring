@@ -1,5 +1,6 @@
 package com.accenture.trainingcfrest.domain;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -38,6 +39,12 @@ public class ProductsEntity {
     
     @Column(name = "MODIFIEDBY")
     private String modifiedBY;
+    
+    @Column(name = "VALIDFROM")
+    private LocalDateTime validFrom;
+    
+    @Column(name = "VALIDTO")
+    private LocalDateTime validTo;
 	
 	@Column(name = "NAME")
 	private String name;
@@ -89,6 +96,20 @@ public class ProductsEntity {
         this.modifiedBY = modifiedBY;
     }
 	
+    public LocalDateTime getValidFrom() {
+		return validFrom;
+	}
+	public void setValidFrom(LocalDateTime validFrom) {
+		this.validFrom = validFrom;
+	}
+	
+	public LocalDateTime getValidTo() {
+		return validTo;
+	}
+	public void setValidTo(LocalDateTime validTo) {
+		this.validTo = validTo;
+	}
+    
 	public String getName() {
 		return name;
 	}

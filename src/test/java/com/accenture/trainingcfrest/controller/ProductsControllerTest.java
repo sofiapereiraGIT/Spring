@@ -52,13 +52,7 @@ public class ProductsControllerTest {
 		productsTO.setManufacturer("MAnufacturerTest");
 		productsTO.setSalesPrice(12.0);
 		productsTO.setBasePrice(12.0);
-		productsTO.setQuantity(5);
-		Date newDate = new Date();
-		productsTO.setCreatedAT(newDate);
-		productsTO.setModifiedAT(newDate);
-		productsTO.setCreatedBY("Sofia Test");
-		productsTO.setModifiedBY("Sofia Test");
-		
+		productsTO.setQuantity(5);		
 		product = productsTO;
 	}
 
@@ -103,13 +97,7 @@ public class ProductsControllerTest {
 		product.setSalesPrice(newPrice);
 		product.setBasePrice(newPrice);
 		int newQuantity = 8;
-		product.setQuantity(newQuantity);
-		Date newDate = new Date();
-		product.setCreatedAT(newDate);
-		product.setModifiedAT(newDate);
-		String newCreator = "Sofia Teste Alterado";
-		product.setCreatedBY(newCreator);
-		product.setModifiedBY(newCreator);		
+		product.setQuantity(newQuantity);	
 		
 		final byte[] productAsByteArray = mapper.writeValueAsBytes(product);
 
@@ -131,10 +119,6 @@ public class ProductsControllerTest {
 		assertThat(objResult.getBasePrice()).isEqualTo(newPrice);
 		assertThat(objResult.getSalesPrice()).isEqualTo(newPrice);
 		assertThat(objResult.getQuantity()).isEqualTo(newQuantity);
-		assertThat(objResult.getCreatedAT()).isEqualTo(newDate);
-		assertThat(objResult.getModifiedAT()).isEqualTo(newDate);
-		assertThat(objResult.getCreatedBY()).isEqualTo(newCreator);
-		assertThat(objResult.getModifiedBY()).isEqualTo(newCreator);
 	}
 
 	@Test

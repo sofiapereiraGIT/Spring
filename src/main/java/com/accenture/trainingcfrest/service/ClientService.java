@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import com.accenture.trainingcfrest.domain.ClientEntity;
 import com.accenture.trainingcfrest.dto.ClientTO;
 import com.accenture.trainingcfrest.repository.ClientRepository;
+
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -48,6 +50,13 @@ public class ClientService {
 	}
 	
 	public ClientTO saveCli(ClientTO cli){
+		if (Strings.isEmpty(cli.getId())) {
+			cli.setCreatedBY("spring");
+			cli.setCreatedAT((LocalDateTime.now().toString()));
+		}
+		cli.setModifiedBY("spring");
+		cli.setModifiedAT(LocalDateTime.now().toString());
+		
 		ClientEntity save = rep.save(mapper.map(cli, ClientEntity.class));
 		return mapper.map(save, ClientTO.class);
 	}

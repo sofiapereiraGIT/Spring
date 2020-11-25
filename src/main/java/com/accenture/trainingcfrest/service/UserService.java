@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import com.accenture.trainingcfrest.domain.UserEntity;
 import com.accenture.trainingcfrest.dto.UserTO;
 import com.accenture.trainingcfrest.repository.UserRepository;
+
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -48,6 +50,13 @@ public class UserService {
 	}
 	
 	public UserTO saveUser(UserTO user){
+		if (Strings.isEmpty(user.getId())) {
+			user.setCreatedBY("spring");
+			user.setCreatedAT((LocalDateTime.now().toString()));
+		}
+		user.setModifiedBY("spring");
+		user.setModifiedAT(LocalDateTime.now().toString());
+		
 		UserEntity save = rep.save(mapper.map(user, UserEntity.class));
 		return mapper.map(save, UserTO.class);
 	}

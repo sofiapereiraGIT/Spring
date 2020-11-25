@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import com.accenture.trainingcfrest.domain.ProductsEntity;
 import com.accenture.trainingcfrest.dto.ProductsTO;
 import com.accenture.trainingcfrest.repository.ProductsRepository;
+
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -48,6 +50,13 @@ public class ProductsService {
 	}
 	
 	public ProductsTO saveProduct(ProductsTO product){
+		if (Strings.isEmpty(product.getId())) {
+			product.setCreatedBY("spring");
+			product.setCreatedAT((LocalDateTime.now().toString()));
+		}
+		product.setModifiedBY("spring");
+		product.setModifiedAT(LocalDateTime.now().toString());
+		
 		ProductsEntity save = rep.save(mapper.map(product, ProductsEntity.class));
 		return mapper.map(save, ProductsTO.class);
 	}

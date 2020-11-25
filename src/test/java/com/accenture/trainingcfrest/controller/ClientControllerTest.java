@@ -50,14 +50,7 @@ public class ClientControllerTest {
 		ClientTO clientTO = new ClientTO();
 		clientTO.setName("Client Test");
 		clientTO.setFamilyName("FamilyNameTest");
-		clientTO.setAge(20);
-
-		Date newDate = new Date();
-		clientTO.setCreatedAT(newDate);
-		clientTO.setModifiedAT(newDate);
-		clientTO.setCreatedBY("Sofia Test");
-		clientTO.setModifiedBY("Sofia Test");
-		
+		clientTO.setAge(20);		
 		client = clientTO;
 	}
 
@@ -97,15 +90,9 @@ public class ClientControllerTest {
 		String newName = "Client Teste Alterado";
 		String newFamilyName = "FamilyName Test Alterado";
 		int newAge = 21;
-		Date newDate = new Date();
-		String newCreator = "Sofia Teste Alterado";
 		client.setName(newName);
 		client.setFamilyName(newFamilyName);
 		client.setAge(newAge);
-		client.setCreatedAT(newDate);
-		client.setModifiedAT(newDate);
-		client.setCreatedBY(newCreator);
-		client.setModifiedBY(newCreator);
 		
 		final byte[] productAsByteArray = mapper.writeValueAsBytes(client);
 
@@ -126,10 +113,6 @@ public class ClientControllerTest {
 		assertThat(objResult.getFamilyName()).isEqualTo(newFamilyName);
 		assertThat(objResult.getAge()).isEqualTo(newAge);
 		assertThat(objResult.getName()).isEqualTo(newName);
-		assertThat(objResult.getCreatedAT()).isEqualTo(newDate);
-		assertThat(objResult.getModifiedAT()).isEqualTo(newDate);
-		assertThat(objResult.getCreatedBY()).isEqualTo(newCreator);
-		assertThat(objResult.getModifiedBY()).isEqualTo(newCreator);
 	}
 
 	@Test

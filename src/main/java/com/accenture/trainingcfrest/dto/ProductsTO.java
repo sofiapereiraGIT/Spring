@@ -1,14 +1,14 @@
 package com.accenture.trainingcfrest.dto;
 
-import java.util.Date;
-
 public class ProductsTO {
 	
 	private String id;
-	private Date createdAT;
-	private Date modifiedAT;
+	private String createdAT;
+	private String modifiedAT;
 	private String createdBY;
 	private String modifiedBY;
+	private String validTo;
+	private String validFrom;
 	private String name;
 	private String manufacturer;
     private Double salesPrice;
@@ -22,17 +22,17 @@ public class ProductsTO {
 		this.id = id;
 	}
 	
-	public Date getCreatedAT() {
+	public String getCreatedAT() {
         return createdAT;
     }
-    public void setCreatedAT(Date createdAT) {
+    public void setCreatedAT(String createdAT) {
         this.createdAT = createdAT;
     }
 
-    public Date getModifiedAT() {
+    public String getModifiedAT() {
         return modifiedAT;
     }
-    public void setModifiedAT(Date modifiedAT) {
+    public void setModifiedAT(String modifiedAT) {
         this.modifiedAT = modifiedAT;
     }
 
@@ -49,6 +49,20 @@ public class ProductsTO {
     public void setModifiedBY(String modifiedBY) {
         this.modifiedBY = modifiedBY;
     }
+    
+    public String getValidFrom() {
+		return validFrom;
+	}
+	public void setValidFrom(String validFrom) {
+		this.validFrom = validFrom;
+	}
+	
+	public String getValidTo() {
+		return validTo;
+	}
+	public void setValidTo(String validTo) {
+		this.validTo = validTo;
+	}
 	
 	public String getName() {
 		return name;

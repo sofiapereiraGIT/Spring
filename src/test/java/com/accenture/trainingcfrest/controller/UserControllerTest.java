@@ -49,13 +49,6 @@ public class UserControllerTest {
 	private static void getUserTest() {
 		UserTO userTO = new UserTO();
 		userTO.setName("User Test");
-
-		Date newDate = new Date();
-		userTO.setCreatedAT(newDate);
-		userTO.setModifiedAT(newDate);
-		userTO.setCreatedBY("Sofia Test");
-		userTO.setModifiedBY("Sofia Test");
-		
 		user = userTO;
 	}
 
@@ -94,12 +87,6 @@ public class UserControllerTest {
 	public void ab_changeUser() throws UnsupportedEncodingException, Exception {
 		String newName = "User Teste Alterado";
 		user.setName(newName);
-		Date newDate = new Date();
-		user.setCreatedAT(newDate);
-		user.setModifiedAT(newDate);
-		String newCreator = "Sofia Teste Alterado";
-		user.setCreatedBY(newCreator);
-		user.setModifiedBY(newCreator);
 		
 		final byte[] productAsByteArray = mapper.writeValueAsBytes(user);
 
@@ -117,10 +104,6 @@ public class UserControllerTest {
 
 		assertThat(objResult.getId()).isEqualTo(user.getId());
 		assertThat(objResult.getName()).isEqualTo(newName);
-		assertThat(objResult.getCreatedAT()).isEqualTo(newDate);
-		assertThat(objResult.getModifiedAT()).isEqualTo(newDate);
-		assertThat(objResult.getCreatedBY()).isEqualTo(newCreator);
-		assertThat(objResult.getModifiedBY()).isEqualTo(newCreator);
 	}
 
 	@Test
