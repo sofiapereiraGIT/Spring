@@ -1,6 +1,6 @@
 package com.accenture.trainingcfrest.domain;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,12 +9,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.GenericGenerator;
-
-import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 @Table(name = "TRAININGCF_DB_SALESORDER_TBLSALESORDERITEM")
@@ -30,12 +26,10 @@ public class SalesOrderItemEntity {
 	private String id;
 	
 	@Column(name = "CREATEDAT")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date createdAT;
+    private LocalDateTime createdAT;
     
     @Column(name = "MODIFIEDAT")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date modifiedAT;
+    private LocalDateTime modifiedAT;
     
     @Column(name = "CREATEDBY")
     private String createdBY;
@@ -64,17 +58,17 @@ public class SalesOrderItemEntity {
 		this.id = id;
 	}
 	
-	public Date getCreatedAT() {
+	public LocalDateTime getCreatedAT() {
         return createdAT;
     }
-    public void setCreatedAT(Date createdAT) {
+    public void setCreatedAT(LocalDateTime createdAT) {
         this.createdAT = createdAT;
     }
 
-    public Date getModifiedAT() {
+    public LocalDateTime getModifiedAT() {
         return modifiedAT;
     }
-    public void setModifiedAT(Date modifiedAT) {
+    public void setModifiedAT(LocalDateTime modifiedAT) {
         this.modifiedAT = modifiedAT;
     }
 

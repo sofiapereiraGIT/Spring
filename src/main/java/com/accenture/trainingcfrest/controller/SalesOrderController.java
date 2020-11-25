@@ -11,13 +11,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+
 import com.accenture.trainingcfrest.service.SalesOrderService;
+import com.sap.cloud.security.xsuaa.token.Token;
 import com.accenture.trainingcfrest.dto.SalesOrderTO;
 import java.util.*;
 
 @RestController
 @RequestMapping("/SalesOrder")
 public class SalesOrderController {
+	
+	//@AuthenticationPrincipal Token token, 
 	
 	@Autowired
 	SalesOrderService service;

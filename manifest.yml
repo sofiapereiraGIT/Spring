@@ -1,0 +1,9 @@
+applications:
+- name: trainingcfrest
+  instances: 1
+  memory: 896M
+  routes:
+    - route: trainingcfrest-3a75d20btrial-training-dev.cfapps.eu10.hana.ondemand.com
+  path: target/trainingcfrest-0.0.1.jar
+  services:
+    - xsuaa-basic

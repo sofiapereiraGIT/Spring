@@ -12,13 +12,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+
 import com.accenture.trainingcfrest.service.UserService;
+import com.sap.cloud.security.xsuaa.token.Token;
 import com.accenture.trainingcfrest.dto.UserTO;
 import java.util.*;
 
 @RestController
 @RequestMapping("/User")
 public class UserController {
+	
+	//@AuthenticationPrincipal Token token, 
 	
 	@Autowired
 	UserService service;

@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import com.sap.cloud.security.xsuaa.token.Token;
+
 import com.accenture.trainingcfrest.service.ClientService;
 import com.accenture.trainingcfrest.dto.ClientTO;
 import java.util.*;
@@ -19,6 +22,8 @@ import java.util.*;
 @RestController
 @RequestMapping("/Client")
 public class ClientController {
+	
+	//@AuthenticationPrincipal Token token
 	
 	@Autowired
 	ClientService service;

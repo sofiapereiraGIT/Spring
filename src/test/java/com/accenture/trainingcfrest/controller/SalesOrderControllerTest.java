@@ -21,19 +21,25 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import com.accenture.trainingcfrest.Application;
+import com.accenture.trainingcfrest.controller.SalesOrderController;
+import com.accenture.trainingcfrest.dto.ClientTO;
+import com.accenture.trainingcfrest.dto.ProductsTO;
 import com.accenture.trainingcfrest.dto.SalesOrderItemTO;
 import com.accenture.trainingcfrest.dto.SalesOrderTO;
+import com.accenture.trainingcfrest.dto.UserTO;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-//@ActiveProfiles(profiles = { "test" })
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+@ActiveProfiles(profiles = { "test" })
+@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT, classes = Application.class)
 @RunWith(SpringJUnit4ClassRunner.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class SalesOrderControllerTest {
@@ -46,24 +52,51 @@ public class SalesOrderControllerTest {
 	private static ObjectMapper mapper;
 	private static SalesOrderTO salesOrder;
 
-	private static void getSalesOrderTest() {
-		SalesOrderTO salesOrderTO = new SalesOrderTO();
-		salesOrderTO.setStatus("C");
+	private static void getsalesOrderTest() {
+		
+		List<SalesOrderItemTO> items = new ArrayList<>();
+		
+		ProductsTO productsTO = new ProductsTO();
+		productsTO.setName("Product Test");
+		productsTO.setManufacturer("MAnufacturerTest");
+		productsTO.setQuantity(10);
+		productsTO.setBasePrice(10.0);
+		productsTO.setSalesPrice(5.0);
+		productsTO.setId("1");
+		
+		ClientTO ClientsTO = new ClientTO();
+		ClientsTO.setName("client Test");
+		ClientsTO.setAge(22);
+		ClientsTO.setId("1");
+		ClientsTO.setFamilyName("Sousa");
+		
+		UserTO UsersTO = new UserTO();
+		UsersTO.setName("user Test");
+		UsersTO.setId("1");
 		
 		SalesOrderItemTO salesOrderItemTO = new SalesOrderItemTO();
-		salesOrderItemTO.setQuantity(10);
+		salesOrderItemTO.setProductID(productsTO);
+		salesOrderItemTO.setSalesOrderID("1");
+		salesOrderItemTO.setQuantity(5);
 		salesOrderItemTO.setStatus("C");
+		salesOrderItemTO.setId("2");
 		
-		List<SalesOrderItemTO> items = new ArrayList<SalesOrderItemTO>();
 		items.add(salesOrderItemTO);
-		salesOrderTO.setItems(items);
-		salesOrder = salesOrderTO;
+		
+		SalesOrderTO SalesOrderTO = new SalesOrderTO();
+		SalesOrderTO.setClientID(ClientsTO);
+		SalesOrderTO.setStatus("C");
+		SalesOrderTO.setUserID(UsersTO);
+		SalesOrderTO.setItems(items);
+		SalesOrderTO.setId("1");
+		
+		salesOrder = SalesOrderTO;
 	}
 
 	@BeforeClass
 	public static void setUpBeforeClass() {
 		mapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-		getSalesOrderTest();
+		getsalesOrderTest();
 	}
 
 	@Before
@@ -72,12 +105,13 @@ public class SalesOrderControllerTest {
 	}
 
 	@Test
-	public void aa_saveSalesOrder() throws UnsupportedEncodingException, Exception {
-		final byte[] productAsByteArray = mapper.writeValueAsBytes(salesOrder);
+	public void aa_savesalesOrder() throws UnsupportedEncodingException, Exception {
+
+		final byte[] salesOrderAsByteArray = mapper.writeValueAsBytes(salesOrder);
 
 		final MockHttpServletRequestBuilder request = MockMvcRequestBuilders.post("/SalesOrder")
 				.characterEncoding(StandardCharsets.UTF_8.name()).contentType(MediaType.APPLICATION_JSON)
-				.accept(MediaType.APPLICATION_JSON).content(productAsByteArray);
+				.accept(MediaType.APPLICATION_JSON).content(salesOrderAsByteArray);
 
 		final String result = mockMvc.perform(request).andDo(print()).andExpect(status().is(HttpStatus.OK.value()))
 				.andReturn().getResponse().getContentAsString();
@@ -92,15 +126,16 @@ public class SalesOrderControllerTest {
 	}
 
 	@Test
-	public void ab_changeSalesOrder() throws UnsupportedEncodingException, Exception {
-		String newStatus = "D";
-		salesOrder.setStatus(newStatus);
+	public void ab_changesalesOrder() throws UnsupportedEncodingException, Exception {
+
+		String newStatus = "C";
 		
-		final byte[] productAsByteArray = mapper.writeValueAsBytes(salesOrder);
+		salesOrder.setStatus(newStatus);
+		final byte[] salesOrderAsByteArray = mapper.writeValueAsBytes(salesOrder);
 
 		final MockHttpServletRequestBuilder request = MockMvcRequestBuilders.put("/SalesOrder/"+salesOrder.getId())
 				.characterEncoding(StandardCharsets.UTF_8.name()).contentType(MediaType.APPLICATION_JSON)
-				.accept(MediaType.APPLICATION_JSON).content(productAsByteArray);
+				.accept(MediaType.APPLICATION_JSON).content(salesOrderAsByteArray);
 
 		final String result = mockMvc.perform(request).andDo(print()).andExpect(status().is(HttpStatus.OK.value()))
 				.andReturn().getResponse().getContentAsString();
@@ -112,10 +147,13 @@ public class SalesOrderControllerTest {
 
 		assertThat(objResult.getId()).isEqualTo(salesOrder.getId());
 		assertThat(objResult.getStatus()).isEqualTo(newStatus);
+
 	}
 
 	@Test
-	public void ac_getAllSalesOrder() throws UnsupportedEncodingException, Exception {
+	public void ac_getAllsalesOrders() throws UnsupportedEncodingException, Exception {
+
+		
 		final MockHttpServletRequestBuilder request = MockMvcRequestBuilders.get("/SalesOrder")
 				.characterEncoding(StandardCharsets.UTF_8.name()).contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON);
@@ -128,10 +166,12 @@ public class SalesOrderControllerTest {
 
 		final List<SalesOrderTO> objResult = Arrays.asList(mapper.readValue(result, SalesOrderTO[].class));
 		assertThat(objResult.size()).isGreaterThan(0);
+
 	}
 	
 	@Test
-	public void ad_getOneSalesOrder() throws UnsupportedEncodingException, Exception {		
+	public void ad_getOnesalesOrder() throws UnsupportedEncodingException, Exception {
+
 		final MockHttpServletRequestBuilder request = MockMvcRequestBuilders.get("/SalesOrder/"+salesOrder.getId())
 				.characterEncoding(StandardCharsets.UTF_8.name()).contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON);
@@ -144,16 +184,19 @@ public class SalesOrderControllerTest {
 
 		final SalesOrderTO objResult = mapper.readValue(result, SalesOrderTO.class);
 		assertThat(objResult.getId()).isEqualTo(salesOrder.getId());
+		assertThat(objResult.getItems().size()).isGreaterThan(0);
 	}
 	
 	@Test
-	public void az_deleteSalesOrder() throws UnsupportedEncodingException, Exception {
+	public void az_deletesalesOrder() throws UnsupportedEncodingException, Exception {
+
 		final MockHttpServletRequestBuilder request = MockMvcRequestBuilders.delete("/SalesOrder/"+salesOrder.getId())
 				.characterEncoding(StandardCharsets.UTF_8.name()).contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON);
 
 		mockMvc.perform(request).andDo(print()).andExpect(status().is(HttpStatus.OK.value())).andReturn().getResponse()
 				.getContentAsString();
+
 	}
 
 }

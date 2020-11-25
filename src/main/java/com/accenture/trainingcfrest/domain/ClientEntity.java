@@ -1,5 +1,6 @@
 package com.accenture.trainingcfrest.domain;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -26,12 +27,10 @@ public class ClientEntity {
 	private String id;
 	
 	@Column(name = "CREATEDAT")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date createdAT;
+    private LocalDateTime createdAT;
     
     @Column(name = "MODIFIEDAT")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date modifiedAT;
+    private LocalDateTime modifiedAT;
     
     @Column(name = "CREATEDBY")
     private String createdBY;
@@ -55,17 +54,17 @@ public class ClientEntity {
 		this.id = id;
 	}
 	
-	public Date getCreatedAT() {
+	public LocalDateTime getCreatedAT() {
         return createdAT;
     }
-    public void setCreatedAT(Date createdAT) {
+    public void setCreatedAT(LocalDateTime createdAT) {
         this.createdAT = createdAT;
     }
 
-    public Date getModifiedAT() {
+    public LocalDateTime getModifiedAT() {
         return modifiedAT;
     }
-    public void setModifiedAT(Date modifiedAT) {
+    public void setModifiedAT(LocalDateTime modifiedAT) {
         this.modifiedAT = modifiedAT;
     }
 

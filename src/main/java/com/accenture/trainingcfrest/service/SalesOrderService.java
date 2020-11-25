@@ -7,8 +7,6 @@ import org.springframework.stereotype.Service;
 
 import com.accenture.trainingcfrest.domain.SalesOrderEntity;
 import com.accenture.trainingcfrest.dto.SalesOrderTO;
-import com.accenture.trainingcfrest.dto.ClientTO;
-import com.accenture.trainingcfrest.dto.UserTO;
 import com.accenture.trainingcfrest.dto.SalesOrderItemTO;
 import com.accenture.trainingcfrest.repository.SalesOrderItemRepository;
 import com.accenture.trainingcfrest.repository.SalesOrderRepository;
@@ -22,6 +20,8 @@ public class SalesOrderService {
 	
 	@Autowired
 	SalesOrderRepository rep;
+	
+	@Autowired
 	SalesOrderItemRepository repItem;
 	
 	@Autowired
@@ -57,32 +57,27 @@ public class SalesOrderService {
 			}).collect(Collectors.toList());
 			salesOrder.setItems(collect);
 			
-			/*ClientTO cli = mapper.map(found.get().getClientID(), ClientTO.class);
-			salesOrder.setClientID(cli);
-			
-			UserTO user = mapper.map(found.get().getUserID(), UserTO.class);
-			salesOrder.setUserID(user);*/
-			
 			return salesOrder;
 		}
 		return null;
 	}
 	
-	public SalesOrderTO saveSalesOrder(SalesOrderTO so){		
-		if (Strings.isEmpty(so.getId())) {
-			so.setCreatedBY("spring");
-			so.setCreatedAT((LocalDateTime.now().toString()));
-		}
-		so.setModifiedBY("spring");
-		so.setModifiedAT(LocalDateTime.now().toString());
+	public SalesOrderTO saveSalesOrder(SalesOrderTO salesOrder){	
+		SalesOrderEntity salesOrderEntity = mapper.map(salesOrder, SalesOrderEntity.class);
 		
-		SalesOrderEntity soEntity = mapper.map(so, SalesOrderEntity.class);
-		SalesOrderEntity save = rep.save(soEntity);
-
-		soEntity.getItems().stream().forEach(item -> item.setSalesOrderID(save));
-		repItem.saveAll(soEntity.getItems());
-
-		return mapper.map(save, SalesOrderTO.class);
+		if (Strings.isEmpty(salesOrderEntity.getId())){
+			salesOrderEntity.setCreatedBY("teste");
+			salesOrderEntity.setCreatedAT(LocalDateTime.now());
+		}
+		salesOrderEntity.setModifiedBY("teste");
+		salesOrderEntity.setModifiedAT(LocalDateTime.now());
+		
+		SalesOrderEntity savedEntity = rep.save(salesOrderEntity);
+		
+		salesOrderEntity.getItems().stream().forEach(item -> item.setSalesOrderID(savedEntity));		
+		repItem.saveAll(salesOrderEntity.getItems());
+		
+		return mapper.map(savedEntity, SalesOrderTO.class);
 	}
 
 	public Boolean deleteSalesOrder(String salesOrderID){
