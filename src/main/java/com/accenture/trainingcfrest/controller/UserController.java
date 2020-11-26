@@ -23,34 +23,32 @@ import java.util.*;
 @RequestMapping("/User")
 public class UserController {
 	
-	//@AuthenticationPrincipal Token token, 
-	
 	@Autowired
 	UserService service;
 
 	@GetMapping(value = "")
-	public List<UserTO> getUsers(@RequestParam(value = "keyword", required=false) String keyword, @RequestParam(value = "fuzzy", required=false) boolean fuzzy){
+	public List<UserTO> getUsers(@AuthenticationPrincipal Token token, @RequestParam(value = "keyword", required=false) String keyword, @RequestParam(value = "fuzzy", required=false) boolean fuzzy){
 		return service.findall(keyword, fuzzy);
 	}
 	
 	/** mais variaveis seria "{id}/{outra}" e no Path seria "(..., @PathVariable(value = "outravar") String outravar)**/
 	@GetMapping(value = "{id}")
-	public UserTO getUserByID(@PathVariable(value = "id") String userID){
+	public UserTO getUserByID(@AuthenticationPrincipal Token token, @PathVariable(value = "id") String userID){
 		return service.findById(userID);
 	}
 	
 	@PostMapping(value = "")
-	public UserTO postClient(@RequestBody UserTO user) {
+	public UserTO postClient(@AuthenticationPrincipal Token token, @RequestBody UserTO user) {
 		return service.saveUser(user);
 	}
 	
 	@DeleteMapping(value = "{id}")
-	public String deleteUser(@PathVariable(value = "id") String userID){
+	public String deleteUser(@AuthenticationPrincipal Token token, @PathVariable(value = "id") String userID){
 		return Boolean.toString(service.deleteUser(userID));
 	}
 	
 	@PutMapping(value = "{id}")
-	public UserTO updateClient(@PathVariable(value = "id") String userID, @RequestBody UserTO user){
+	public UserTO updateClient(@AuthenticationPrincipal Token token, @PathVariable(value = "id") String userID, @RequestBody UserTO user){
 		if(!userID.equals(user.getId())){
 			return new UserTO();
 		}

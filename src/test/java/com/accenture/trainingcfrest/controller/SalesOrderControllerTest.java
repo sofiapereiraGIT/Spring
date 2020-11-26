@@ -62,17 +62,17 @@ public class SalesOrderControllerTest {
 		productsTO.setQuantity(10);
 		productsTO.setBasePrice(10.0);
 		productsTO.setSalesPrice(5.0);
-		productsTO.setId("1");
+		productsTO.setId("1"); //tem de existir na BD
 		
 		ClientTO ClientsTO = new ClientTO();
 		ClientsTO.setName("client Test");
 		ClientsTO.setAge(22);
-		ClientsTO.setId("1");
+		ClientsTO.setId("1"); //tem de existir na BD
 		ClientsTO.setFamilyName("Sousa");
 		
 		UserTO UsersTO = new UserTO();
 		UsersTO.setName("user Test");
-		UsersTO.setId("1");
+		UsersTO.setId("1"); //tem de existir na BD
 		
 		SalesOrderItemTO salesOrderItemTO = new SalesOrderItemTO();
 		salesOrderItemTO.setProductID(productsTO);

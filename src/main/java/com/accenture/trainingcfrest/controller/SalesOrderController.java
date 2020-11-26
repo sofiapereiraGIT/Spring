@@ -22,34 +22,32 @@ import java.util.*;
 @RequestMapping("/SalesOrder")
 public class SalesOrderController {
 	
-	//@AuthenticationPrincipal Token token, 
-	
 	@Autowired
 	SalesOrderService service;
 
 	@GetMapping(value = "")
-	public List<SalesOrderTO> getSalesOrder(){
-		return service.findall();
+	public List<SalesOrderTO> getSalesOrder(@AuthenticationPrincipal Token token){
+		return service.findAll();
 	}
 	
 	/** mais variaveis seria "{id}/{outra}" e no Path seria "(..., @PathVariable(value = "outravar") String outravar)**/
 	@GetMapping(value = "{id}")
-	public SalesOrderTO getSalesOrderByID(@PathVariable(value = "id") String salesOrderID){
+	public SalesOrderTO getSalesOrderByID(@AuthenticationPrincipal Token token, @PathVariable(value = "id") String salesOrderID){
 		return service.findById(salesOrderID);
 	}
 	
 	@PostMapping(value = "")
-	public SalesOrderTO postSalesOrder(@RequestBody SalesOrderTO salesOrder) {
+	public SalesOrderTO postSalesOrder(@AuthenticationPrincipal Token token, @RequestBody SalesOrderTO salesOrder) {
 		return service.saveSalesOrder(salesOrder);
 	}
 	
 	@DeleteMapping(value = "{id}")
-	public String deleteSalesOrder(@PathVariable(value = "id") String salesOrderID){
+	public String deleteSalesOrder(@AuthenticationPrincipal Token token, @PathVariable(value = "id") String salesOrderID){
 		return Boolean.toString(service.deleteSalesOrder(salesOrderID));
 	}
 	
 	@PutMapping(value = "{id}")
-	public SalesOrderTO updateSalesOrder(@PathVariable(value = "id") String salesOrderID, @RequestBody SalesOrderTO salesOrder){
+	public SalesOrderTO updateSalesOrder(@AuthenticationPrincipal Token token, @PathVariable(value = "id") String salesOrderID, @RequestBody SalesOrderTO salesOrder){
 		if(!salesOrderID.equals(salesOrder.getId())){
 			return new SalesOrderTO();
 		}

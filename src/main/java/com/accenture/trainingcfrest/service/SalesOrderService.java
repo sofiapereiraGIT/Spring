@@ -27,35 +27,24 @@ public class SalesOrderService {
 	@Autowired
 	ModelMapper mapper;
 	
-	public List<SalesOrderTO> findall() {
-		List<SalesOrderEntity> results = rep.internalFindAll();		
-		return results.stream().map(item -> {
+	public List<SalesOrderTO> findAll(){
+		List<SalesOrderEntity> result = rep.findAll();
+		
+		return result.stream().map(item -> {
 			SalesOrderTO salesOrder = mapper.map(item, SalesOrderTO.class);
-			
-			List<SalesOrderItemTO> collect = item.getItems().stream().map(salesOrderItem -> {
-				return mapper.map(salesOrderItem, SalesOrderItemTO.class);
-			}).collect(Collectors.toList());
-			salesOrder.setItems(collect);
-			
-			/*ClientTO cli = mapper.map(item.getClientID(), ClientTO.class);
-			salesOrder.setClientID(cli);
-			
-			UserTO user = mapper.map(item.getUserID(), UserTO.class);
-			salesOrder.setUserID(user);*/
-			
 			return salesOrder;
 		}).collect(Collectors.toList());
 	}
 	
-	public SalesOrderTO findById(String salesOrderID) {
+	public SalesOrderTO findById(String salesOrderID){
 		SalesOrderEntity found = rep.internalFindById(salesOrderID);
-		if(found != null){
+		if (found!=null){
 			SalesOrderTO salesOrder = mapper.map(found, SalesOrderTO.class);
 			
-			List<SalesOrderItemTO> collect = salesOrder.getItems().stream().map(salesOrderItem -> {
+			/*List<SalesOrderItemTO> collect = salesOrder.getItems().stream().map(salesOrderItem -> {
 				return mapper.map(salesOrderItem, SalesOrderItemTO.class);
 			}).collect(Collectors.toList());
-			salesOrder.setItems(collect);
+			salesOrder.setItems(collect);*/
 			
 			return salesOrder;
 		}
@@ -66,22 +55,38 @@ public class SalesOrderService {
 		SalesOrderEntity salesOrderEntity = mapper.map(salesOrder, SalesOrderEntity.class);
 		
 		if (Strings.isEmpty(salesOrderEntity.getId())){
-			salesOrderEntity.setCreatedBY("teste");
+			salesOrderEntity.setCreatedBY("spring");
 			salesOrderEntity.setCreatedAT(LocalDateTime.now());
 		}
-		salesOrderEntity.setModifiedBY("teste");
+		salesOrderEntity.setModifiedBY("spring");
 		salesOrderEntity.setModifiedAT(LocalDateTime.now());
 		
 		SalesOrderEntity savedEntity = rep.save(salesOrderEntity);
 		
-		salesOrderEntity.getItems().stream().forEach(item -> item.setSalesOrderID(savedEntity));		
-		repItem.saveAll(salesOrderEntity.getItems());
+		salesOrderEntity.getItems().stream().forEach(item -> {
+            item.setSalesOrderID(savedEntity);
+            
+            if (Strings.isEmpty(salesOrderEntity.getId())){
+    			item.setCreatedBY("spring");
+    			item.setCreatedAT(LocalDateTime.now());
+    		}
+            item.setModifiedBY("spring");
+            item.setModifiedAT(LocalDateTime.now());
+            
+            repItem.save(item);
+        });
 		
 		return mapper.map(savedEntity, SalesOrderTO.class);
 	}
 
 	public Boolean deleteSalesOrder(String salesOrderID){
 		try {
+			//tem de se remover os items tb	
+			SalesOrderEntity found = rep.internalFindById(salesOrderID);
+			found.getItems().stream().forEach(item -> {
+				repItem.delete(item);
+			});
+			
 			rep.deleteById(salesOrderID);
 			return true;
 		}

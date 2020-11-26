@@ -22,35 +22,33 @@ import java.util.*;
 @RestController
 @RequestMapping("/Products")
 public class ProductsController {
-	
-	//@AuthenticationPrincipal Token token
-	
+
 	@Autowired
 	ProductsService service;
 
 	@GetMapping(value = "")
-	public List<ProductsTO> getProducts(@RequestParam(value = "keyword", required=false) String keyword, @RequestParam(value = "fuzzy", required=false) boolean fuzzy){
+	public List<ProductsTO> getProducts(@AuthenticationPrincipal Token token, @RequestParam(value = "keyword", required=false) String keyword, @RequestParam(value = "fuzzy", required=false) boolean fuzzy){
 		return service.findall(keyword, fuzzy);
 	}
 	
 	/** mais variaveis seria "{id}/{outra}" e no Path seria "(..., @PathVariable(value = "outravar") String outravar)**/
 	@GetMapping(value = "{id}")
-	public ProductsTO getProductByID(@PathVariable(value = "id") String productID){
+	public ProductsTO getProductByID(@AuthenticationPrincipal Token token, @PathVariable(value = "id") String productID){
 		return service.findById(productID);
 	}
 	
 	@PostMapping(value = "")
-	public ProductsTO postProduct(@RequestBody ProductsTO product) {
+	public ProductsTO postProduct(@AuthenticationPrincipal Token token, @RequestBody ProductsTO product) {
 		return service.saveProduct(product);
 	}
 	
 	@DeleteMapping(value = "{id}")
-	public String deleteProduct(@PathVariable(value = "id") String productID){
+	public String deleteProduct(@AuthenticationPrincipal Token token, @PathVariable(value = "id") String productID){
 		return Boolean.toString(service.deleteProduct(productID));
 	}
 	
 	@PutMapping(value = "{id}")
-	public ProductsTO updateProduct(@PathVariable(value = "id") String productID, @RequestBody ProductsTO product){
+	public ProductsTO updateProduct(@AuthenticationPrincipal Token token, @PathVariable(value = "id") String productID, @RequestBody ProductsTO product){
 		if(!productID.equals(product.getId())){
 			return new ProductsTO();
 		}
